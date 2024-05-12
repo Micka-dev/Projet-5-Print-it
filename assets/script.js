@@ -28,7 +28,7 @@ slidesDisplay(slides)
 tagLineDisplay(slides)
 bulletsSelect()
 
-// fonction qui permet d'afficher la diapo en fonction de son index
+// Fonction qui permet d'afficher la diapo en fonction de son index
 // ****************************************************************
 
 function slidesDisplay(slides) {
@@ -36,7 +36,7 @@ function slidesDisplay(slides) {
 	bannerImage.src = "assets/images/slideshow/" + slides[i].image
 }
 
-// fonction qui permet d'afficher la tagLine lié à la diapo
+// Fonction qui permet d'afficher le slogan lié à la diapo
 // ********************************************************
 
 function tagLineDisplay(slides) {
@@ -44,7 +44,7 @@ function tagLineDisplay(slides) {
 	tagLine.innerHTML = slides[i].tagLine
 }
 
-// fonction qui permet de selectionner le point lié à la diapo
+// Fonction qui permet de selectionner le point lié à la diapo
 // **********************************************************
 
 function bulletsSelect() {
@@ -52,7 +52,7 @@ function bulletsSelect() {
 	bullet[i].classList.add("dot_selected")
 }
 
-//  fonction qui réinitialise les bullets (permet qu'ils soient tous déselectionnées)
+//  Fonction qui réinitialise les points (permet qu'ils soient tous déselectionnées)
 // **********************************************************************************
 
 function resetBullets() {
