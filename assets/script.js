@@ -1,3 +1,6 @@
+// Tableau contenant des objets (partie de la source de l'image & texte lié à la slide)
+// ************************************************************************************
+
 const slides = [
 	{
 		"image": "slide1.jpg",
@@ -17,38 +20,41 @@ const slides = [
 	}
 ]
 
-const bullets = [
-	{
-		"dot": "dot_selected"
-	},
-	{
-		"dot": "_selected"
-	},
-	{
-		"3": "dot_selected"
-	},
-	{
-		"4": "dot_selected"
-	}
-]
-
+// Déclaration des variables et initialisation
+// *******************************************
 
 let i = 0
+slidesDisplay(slides)
+tagLineDisplay(slides)
+bulletsSelect()
 
-let bannerImage = document.querySelector(".banner-img")
-bannerImage.src = "assets/images/slideshow/" + slides[i].image
+// fonction qui permet d'afficher la diapo en fonction de son index
+// ****************************************************************
 
-let tagLine = document.querySelector("#banner p")
-tagLine.innerHTML = slides[i].tagLine
+function slidesDisplay(slides) {
+	let bannerImage = document.querySelector(".banner-img")
+	bannerImage.src = "assets/images/slideshow/" + slides[i].image
+}
 
-// console.log(bullet [i])  // j'arrive à selectionner chaque point
-// console.log(bullet)  // j'arrive à selectionner tous les points
+// fonction qui permet d'afficher la tagLine lié à la diapo
+// ********************************************************
 
+function tagLineDisplay(slides) {
+	let tagLine = document.querySelector("#banner p")
+	tagLine.innerHTML = slides[i].tagLine
+}
 
-// bullet.classList.add("dot_selected")
+// fonction qui permet de selectionner le point lié à la diapo
+// **********************************************************
 
-/////////
+function bulletsSelect() {
+	let bullet = document.querySelectorAll(".dots div")
+	bullet[i].classList.add("dot_selected")
+}
+
 //  fonction qui réinitialise les bullets (permet qu'ils soient tous déselectionnées)
+// **********************************************************************************
+
 function resetBullets() {
 	let bullet = document.querySelectorAll(".dots div")
 	for (j = 0; j < bullet.length; j++) {
@@ -57,50 +63,44 @@ function resetBullets() {
 	}
 }
 
-//////////
-resetBullets()
-
-let bullet = document.querySelectorAll(".dots div")
-bullet[i].classList.add("dot_selected")
-
-
-// let point = bullet [i]
-// point.classList.add("photo")
-// console.log(bullet[i])
-// bullets[i].classList.add("dot_selected")
-
-// let bullet = document.querySelector(".dot2")
-// bullet.class = "dot"+ bullets[2].dot
-
-
+//  Navigation au clic sur la flèche gauche
+// *****************************************
 
 let arrowLeft = document.querySelector(".arrow_left")
 arrowLeft.addEventListener("click", () => {
-	console.log(i)
+	resetBullets()
 	if (i === 0) {
-		bannerImage.src = "assets/images/slideshow/" + slides[3].image
-		tagLine.innerHTML = slides[3].tagLine
 		i = 3
+		slidesDisplay(slides)
+		tagLineDisplay(slides)
+		bulletsSelect()
 	} else {
+		resetBullets()
 		i--
-		bannerImage.src = "assets/images/slideshow/" + slides[i].image
-		tagLine.innerHTML = slides[i].tagLine
+		slidesDisplay(slides)
+		tagLineDisplay(slides)
+		bulletsSelect()
 	}
 }
 )
 
+//  Navigation au clic sur la flèche droite
+// *****************************************
+
 let arrowRight = document.querySelector(".arrow_right")
-// console.log(arrowRight)
 arrowRight.addEventListener("click", () => {
-	console.log(i)
+	resetBullets()
 	if (i === 3) {
-		bannerImage.src = "assets/images/slideshow/" + slides[0].image
-		tagLine.innerHTML = slides[0].tagLine
 		i = 0
+		slidesDisplay(slides)
+		tagLineDisplay(slides)
+		bulletsSelect()
 	} else {
+		resetBullets()
 		i++
-		bannerImage.src = "assets/images/slideshow/" + slides[i].image
-		tagLine.innerHTML = slides[i].tagLine
+		slidesDisplay(slides)
+		tagLineDisplay(slides)
+		bulletsSelect()
 	}
 }
 )
