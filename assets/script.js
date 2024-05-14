@@ -1,6 +1,7 @@
 
-// Tableau contenant des objets (partie de la source de l'image & texte lié à la slide) Il est possible d'ajouter ou supprimer des slides sans modification du code.
-// *****************************************************************************************************************************************************************
+// Tableau contenant des objets (partie de la source de l'image & slogan lié à la diapo)
+// ************************************************************************************
+//  (Il est possible d'ajouter ou supprimer des diapos directement dans le tableau sans modification du code).
 
 const slides = [
 	{
@@ -22,106 +23,136 @@ const slides = [
 ]
 
 
+// Initialisation, déclaration de variable et appel de fonctions
+// *************************************************************
+
+let indexTableauSlides = 0
+imageCreate()
+bulletsCreate(slides)
+slideDisplay(slides, indexTableauSlides)
+tagLineDisplay(slides, indexTableauSlides)
+bulletSelect(indexTableauSlides)
+
+
 // Création de l'élement image
 // ***************************
-// Obligé de retapé la div <div id="banner"> en entier car ça écrase le contenu !
+// Création d'un élément image auquel on ajoute une classe, une source et "alt"
+// Ajout de l'élément créé en tant qu'enfant de la div ayant pour id "banner"
 
-let img = `
-	<img class = "banner-img" src="" alt= "Banner Print-it">
-	<p><</p> 													   
-	<div class="dots">
-		<div class="dot"></div>
-		<div class="dot"></div>
-		<div class="dot"></div>
-		<div class="dot"></div>
-	</div>
-	<img class=" arrow arrow_left" src="assets/images/arrow_left.png" alt="image d'une flèche de navigation gauche">
-	<img class=" arrow arrow_right" src="assets/images/arrow_right.png" alt="image d'une flèche de navigation droite">
-` 
-document.getElementById("banner").innerHTML = img
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// Autre méthode
-// *************
-// let img = document.createElement("img")						
-// img.classList.add("banner-img")
-// img.alt = "Banner Print-it"
-// img.src = ""
-// img.classList.add("banner-img")
-// document.getElementById("banner").appendChild(img)			  
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-// Déclaration des variables et initialisation
-// *******************************************
-
-let i = 0
-slidesDisplay(slides)
-tagLineDisplay(slides)
-bulletsSelect()
-
-// Fonction qui permet d'afficher la diapo en fonction de son index
-// ****************************************************************
-
-function slidesDisplay(slides) {
-	let bannerImage = document.querySelector(".banner-img")		   // Récupération de l'élément du DOM "img" (diapo)
-	bannerImage.src = "assets/images/slideshow/" + slides[i].image // Modification de l'attribut source de l'image dynamiquement en fonction de l'index de la diapo
+function imageCreate() {
+	let img = document.createElement("img")
+	img.classList.add("banner-img")
+	img.alt = "Banner Print-it"
+	img.src = ""
+	document.getElementById("banner").appendChild(img)
 }
 
-// Fonction qui permet d'afficher le slogan lié à la diapo
-// ********************************************************
 
-function tagLineDisplay(slides) {
-	let tagLine = document.querySelector("#banner p")				// Récupération de l'élément du DOM "p" (slogan)
-	tagLine.innerHTML = slides[i].tagLine							// Ajout du slogan de la diapo dans la balise "p" dynamiquement en fonction de l'index de la diapo
-}
+// Création des élements points en fonction du nombre de diapos de manière dynamique
+// *********************************************************************************
+// Création d'une boucle permettant de créer un nombre de points équivalent au nombre de diapos
+// Ajout des éléments créés en tant qu'enfants de la div ayant pour classe "dots"
 
-// Fonction qui permet de selectionner le point lié à la diapo
-// **********************************************************
-
-function bulletsSelect() {
-	let bullet = document.querySelectorAll(".dots div")				// Récupération de l'ensemble des éléments DOM "dot" (bullets)
-	bullet[i].classList.add("dot_selected")							// Ajout dynamique de la classe "dot_selected" au "bullet" en fonction de son index et de la diapo
-}
-
-//  Fonction qui réinitialise les points (permet qu'ils soient tous déselectionnées)
-// **********************************************************************************
-
-function resetBullets() {
-	let bullet = document.querySelectorAll(".dots div")				// Récupération de l'ensemble des éléments DOM "dot" (bullets)
-	for (j = 0; j < bullet.length; j++) {							// Création d'une boucle "for" pour supprimer la classe "dot_selected" de chaque "bullet"
-		bullet[j].classList.remove("dot_selected")
+function bulletsCreate(slides) {
+	for (let indexTableauSlides = 0; indexTableauSlides < slides.length; indexTableauSlides++) {
+		let dot = document.createElement("div")
+		dot.classList.add("dot")
+		document.querySelector("div .dots").appendChild(dot)
 	}
 }
 
-//  Navigation au clic sur la flèche gauche
-// *****************************************
-																	
-let arrowLeft = document.querySelector(".arrow_left")				// Récupération de l'élément du DOM "img" (flèche gauche)
-arrowLeft.addEventListener("click", () => {							// Ajout d'un écouteur au clic sur la flèche gauche
-	resetBullets()													// Appel de la fonction qui permet de déselectionner les points
-	i--																// Incrémentation (négative) permettant de passer d'une diapo à l'autre dans le bonne ordre
-	if (i === -1) {													// Structure conditionnelle permettant d'appeler les différentes fonctions dans l'ordre et de gérer le cas particulier pour que le carrousel boucle à l'infini :
-		i = slides.length-1	}										// Comme il n'y a pas de diapo avant la 1ère on passe à la dernière (il y a 4 diapos : la 1érè a pour indice 0 et la dernière 3)
-		slidesDisplay(slides)										// Appel de la fonction qui permet d'afficher la diapo
-		tagLineDisplay(slides)										// Appel de la fonction qui permet d'afficher le slogan
-		bulletsSelect()												// Appel de la fonction qui permet de sélectionner le point
-}
-)
 
-//  Navigation au clic sur la flèche droite
-// *****************************************
+// Fonction qui permet d'afficher la diapo en fonction de son index
+// ****************************************************************
+// Récupération de l'élément "img" du DOM (emplacement pour la diapo)
+// Modification de l'attribut source de l'image dynamiquement en fonction de l'index de la diapo
 
-let arrowRight = document.querySelector(".arrow_right")				// Idem
-arrowRight.addEventListener("click", () => {
-	resetBullets()
-	i++
-	if (i === slides.length ) {										// Comme il n'y a pas de diapo après la 4ème on retourne à zéro
-		i = 0	}													// "slides.length" => Permet de prendre en compte l'ensemble des diapos et le fait que l'index d'un tableau commence à [0]
-		slidesDisplay(slides)										// Il y a 4 diapos, la dernière a pour index 3 ; du coup à l'index 4 on retourne à l'index 0
-		tagLineDisplay(slides)
-		bulletsSelect()
+function slideDisplay(slides, indexTableauSlides) {
+	let bannerImage = document.querySelector(".banner-img")
+	bannerImage.src = "assets/images/slideshow/" + slides[indexTableauSlides].image
 }
-)
+
+
+// Fonction qui permet d'afficher le slogan lié à la diapo
+// ********************************************************
+// Récupération de l'élément "p" du DOM (emplacement pour le slogan)
+// Ajout du slogan de la diapo dans la balise "p" dynamiquement en fonction de l'index de la diapo
+
+function tagLineDisplay(slides, indexTableauSlides) {
+	let tagLine = document.querySelector("#banner p")
+	tagLine.innerHTML = slides[indexTableauSlides].tagLine
+}
+
+
+// Fonction qui permet de selectionner le point lié à la diapo
+// ***********************************************************
+// Récupération de l'ensemble des éléments "dot" du DOM  (bullets)
+// Ajout dynamique de la classe "dot_selected" au "bullet" en fonction de l'index de la diapo afin de voir visuellemnt sur l'écran à quel point appartient la diapo
+
+function bulletSelect(indexTableauSlides) {
+	let bullet = document.querySelectorAll(".dots div")
+	bullet[indexTableauSlides].classList.add("dot_selected")
+}
+
+
+//  Fonction qui réinitialise les points (permet qu'ils soient tous déselectionnées)
+// **********************************************************************************
+// Récupération de l'ensemble des éléments "dot" du DOM  (bullets)
+// Création d'une boucle "for" pour supprimer la classe "dot_selected" de chaque "bullet"
+
+function bulletsReset() {
+	let bullet = document.querySelectorAll(".dots div")
+	for (let compteur = 0; compteur < bullet.length; compteur++) {
+		bullet[compteur].classList.remove("dot_selected")
+	}
+}
+
+
+//  Gestion de l'évènement "click" sur la flèche gauche et sur la flèche droite
+// ****************************************************************************
+
+// Fonction principale de gestion des "click"
+// """"""""""""""""""""""""""""""""""""""""""
+// Appel de la fonction qui permet de déselectionner tous les points
+// Structure conditionnelle prenant en compte les cas particuliers des deux boutons flèches afin d'avoir un carrousel qui boucle à l'infini
+// Appel des fonctions permettant respectivement l'affichage de la diapo, l'affichage du slogan et la selection du point ; 
+// le tout en fonction de l'index du tableau
+
+function onArrowClick(id) {
+	bulletsReset()
+	if (id == "arrow_left") {
+		indexTableauSlides--
+		if (indexTableauSlides === -1) {
+			indexTableauSlides = slides.length - 1
+		}
+	} else {
+		indexTableauSlides++
+		if (indexTableauSlides === slides.length) {
+			indexTableauSlides = 0
+		}
+	}
+	slideDisplay(slides, indexTableauSlides)
+	tagLineDisplay(slides, indexTableauSlides)
+	bulletSelect(indexTableauSlides)
+}
+
+
+// Gestion du "click" sur la flèche gauche en appelant la fonction "onArrowClick (id)"
+// """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+// Récupération de l'élément du DOM "img" (flèche gauche)
+// Ajout d'un écouteur au clic sur la flèche gauche pour récupéré l'id de l'évènement qui vient de se dérouler 
+// Application de la fonction principale qui prend en compte l'id récupéré
+
+let arrowLeft = document.querySelector(".arrow_left")
+arrowLeft.addEventListener("click", (event) => {
+	onArrowClick(event.target.id)
+})
+
+// Gestion du "click" sur la flèche droite en appelant la fonction "onArrowClick (id)"
+// """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let arrowRight = document.querySelector(".arrow_right")
+arrowRight.addEventListener("click", (event) => {
+	onArrowClick(event.target.id)
+
+})
+
