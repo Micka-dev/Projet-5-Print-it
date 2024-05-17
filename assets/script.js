@@ -23,23 +23,12 @@ const slides = [
 ]
 
 
-// Initialisation, déclaration de variable et appel de fonctions
-// *************************************************************
-
-let indexTableauSlides = 0
-imageCreate()
-bulletsCreate(slides)
-slideDisplay(slides, indexTableauSlides)
-tagLineDisplay(slides, indexTableauSlides)
-bulletSelect(indexTableauSlides)
-
-
 // Création de l'élement image
 // ***************************
 // Création d'un élément image auquel on ajoute une classe, une source et "alt"
 // Ajout de l'élément créé en tant qu'enfant de la div ayant pour id "banner"
 
-function imageCreate() {
+function imageContainerCreate() {
 	let img = document.createElement("img")
 	img.classList.add("banner-img")
 	img.alt = "Banner Print-it"
@@ -57,7 +46,7 @@ function bulletsCreate(slides) {
 	for (let indexTableauSlides = 0; indexTableauSlides < slides.length; indexTableauSlides++) {
 		let dot = document.createElement("div")
 		dot.classList.add("dot")
-		document.querySelector("div .dots").appendChild(dot)
+		document.querySelector("#banner .dots").appendChild(dot)
 	}
 }
 
@@ -87,7 +76,8 @@ function tagLineDisplay(slides, indexTableauSlides) {
 // Fonction qui permet de selectionner le point lié à la diapo
 // ***********************************************************
 // Récupération de l'ensemble des éléments "dot" du DOM  (bullets)
-// Ajout dynamique de la classe "dot_selected" au "bullet" en fonction de l'index de la diapo afin de voir visuellemnt sur l'écran à quel point appartient la diapo
+// Ajout dynamique de la classe "dot_selected" au "bullet" en fonction de l'index de la diapo, 
+// afin de visualiser où on se situe dans le diaporama du carrousel
 
 function bulletSelect(indexTableauSlides) {
 	let bullet = document.querySelectorAll(".dots div")
@@ -108,11 +98,22 @@ function bulletsReset() {
 }
 
 
-//  Gestion de l'évènement "click" sur la flèche gauche et sur la flèche droite
-// ****************************************************************************
+// Initialisation et appel de fonctions
+// ************************************
 
-// Fonction principale de gestion des "click"
-// """"""""""""""""""""""""""""""""""""""""""
+indexTableauSlides = 0
+imageContainerCreate()
+bulletsCreate(slides)
+slideDisplay(slides, indexTableauSlides)
+tagLineDisplay(slides, indexTableauSlides)
+bulletSelect(indexTableauSlides)
+
+
+//  Gestion de l'évènement "click" sur les flèches de navigation du carrousel
+// **************************************************************************
+
+// Fonction principale du carrousel permettant la gestion des "click"
+// """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 // Appel de la fonction qui permet de déselectionner tous les points
 // Structure conditionnelle prenant en compte les cas particuliers des deux boutons flèches afin d'avoir un carrousel qui boucle à l'infini
 // Appel des fonctions permettant respectivement l'affichage de la diapo, l'affichage du slogan et la selection du point ; 
@@ -148,11 +149,11 @@ arrowLeft.addEventListener("click", (event) => {
 	onArrowClick(event.target.id)
 })
 
+
 // Gestion du "click" sur la flèche droite en appelant la fonction "onArrowClick (id)"
 // """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let arrowRight = document.querySelector(".arrow_right")
 arrowRight.addEventListener("click", (event) => {
 	onArrowClick(event.target.id)
-
 })
 
